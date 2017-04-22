@@ -10,13 +10,21 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
 import javax.swing.event.ChangeListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javafx.scene.image.ImageView;
 
 /**
  * Application Revision Screen controller.
@@ -60,7 +68,12 @@ public class ReviseAppController {
     @FXML private Button find;
     @FXML private ChoiceBox formChoiceBox;
     private String revisionImagePath = "";
+    private String filepath;
+    private File tempFile;
+    @FXML private ImageView image1;
+    private Image image;
     int fid;
+    private boolean changeImage = false;
 
     private ArrayList<ApplicationData> formsFound = new ArrayList<>();
     private ObservableList<Integer> formsObservableList;
@@ -116,7 +129,14 @@ public class ReviseAppController {
             type2 = databaseUtil.checkforType2(fid);
             type3 = databaseUtil.checkforType3(fid);
             source = databaseUtil.checkforSource(fid);
-
+            try {
+                String path = getPath();
+                File file = new File(path + "/" + fid + ".jpg");
+                image = new Image(file.toURI().toString());
+                image1.setImage(image);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             if(dataPasser.getDisableRestField() == 1){
                 state.setDisable(true);
                 amount.setDisable(true);
@@ -362,6 +382,14 @@ public class ReviseAppController {
         type2 = databaseUtil.checkforType2(fid);
         type3 = databaseUtil.checkforType3(fid);
         source = databaseUtil.checkforSource(fid);
+        try {
+            String path = getPath();
+            File file = new File(path + "/" + fid + ".jpg");
+            image = new Image(file.toURI().toString());
+            image1.setImage(image);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         if(source.equals("DOMESTIC")){
             dom1111.setSelected(true);
         }
@@ -502,6 +530,9 @@ public class ReviseAppController {
             type3 = Integer.parseInt(amount.getText());
         }
 
+        if(changeImage){
+            saveImage(fid);
+        }
 
         if (wine1.isSelected()) {
             type_of_product = "WINE";
@@ -543,8 +574,15 @@ public class ReviseAppController {
      * @param Event Upload Image button is pressed.
      */
     public void uploadImage(ActionEvent Event){
-        openFileChooser();
-        myFilePath1.setText(revisionImagePath);
+        tempFile = screenUtil.openFileChooser();
+        if (tempFile != null) {
+            //myFilePath.setText(tempFile.getPath());
+            filepath = tempFile.toURI().toString();
+            System.out.println(filepath);
+            javafx.scene.image.Image img = new javafx.scene.image.Image(filepath);
+            image1.setImage(img);
+        }
+        changeImage = true;
     }
 
     @FXML
@@ -569,5 +607,30 @@ public class ReviseAppController {
     }
 
 
+    public String getPath() throws UnsupportedEncodingException {
+
+
+        URL url = this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        String jarPath = URLDecoder.decode(url.getFile(), "UTF-8");
+        String parentPath = new File(jarPath).getParentFile().getPath();
+
+        String fileSeparator = System.getProperty("file.separator");
+        String newDir = parentPath + fileSeparator + "images" + fileSeparator;
+
+        System.out.println(newDir);
+
+        return newDir;
+    }
+
+    public void saveImage(int id){
+        BufferedImage image2 = null;
+        try {
+            String path = getPath();
+            image2 = ImageIO.read(tempFile);
+            ImageIO.write(image2, "jpg", new File(path + "/" + id + ".jpg"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }

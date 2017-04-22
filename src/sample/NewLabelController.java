@@ -14,8 +14,12 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javafx.scene.control.TextField;
+
+import javax.imageio.ImageIO;
 import java.util.Random;
 /**
  * Controller for new label screen.
@@ -75,6 +81,7 @@ public class NewLabelController{
     @FXML private Button clear;
     @FXML private Button helpNewButton;
     private String filepath;
+    private File tempFile;
     @FXML
     /**
      * Clears information from the screen.
@@ -497,6 +504,7 @@ public class NewLabelController{
                 vintage_date, ph_level, alcoholContent, status, type1, type2, type3);
 
         roundRobin();
+        saveImage(id);
 
         return id;
 
@@ -508,7 +516,7 @@ public class NewLabelController{
      */
 
     public void chooseFile(ActionEvent event)throws Exception{
-            File tempFile = work.openFileChooser();
+            tempFile = work.openFileChooser();
             if (tempFile != null) {
                 //myFilePath.setText(tempFile.getPath());
                 filepath = tempFile.toURI().toString();
@@ -553,6 +561,7 @@ public class NewLabelController{
 
 
         roundRobin();
+        saveImage(id);
         return id;
     }
 
@@ -584,6 +593,7 @@ public class NewLabelController{
                 dateFormat, applicantName, alcoholType, alcoholContent, status, type1, type2, type3);
 
         roundRobin();
+        saveImage(id);
         return id;
     }
 
@@ -613,6 +623,32 @@ public class NewLabelController{
     public void exportPDF () {
 
 
+    }
+
+    public String getPath() throws UnsupportedEncodingException{
+
+
+        URL url = this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        String jarPath = URLDecoder.decode(url.getFile(), "UTF-8");
+        String parentPath = new File(jarPath).getParentFile().getPath();
+
+        String fileSeparator = System.getProperty("file.separator");
+        String newDir = parentPath + fileSeparator + "images" + fileSeparator;
+
+        System.out.println(newDir);
+
+        return newDir;
+    }
+
+    public void saveImage(int id){
+        BufferedImage image2 = null;
+        try {
+            String path = getPath();
+            image2 = ImageIO.read(tempFile);
+            ImageIO.write(image2, "jpg", new File(path + "/" + id + ".jpg"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
