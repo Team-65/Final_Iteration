@@ -1,10 +1,14 @@
 package sample;
 
+import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.application.HostServices;
 
 import java.io.InputStream;
 
@@ -16,6 +20,8 @@ public class AlcoholInfoController {
     @FXML
     Label alcAID, alcBrandName, alcType, alcAppelation, alcSulfite, alcAlcoholContent, alcNetContent,alcHealthWarning,
           alcProductType, alcClass, alcLegibility, alcSize, alcFormula, alcInfo;
+    @FXML
+    Hyperlink buy, review;
     @FXML
     ImageView alcImage;
     @FXML
@@ -52,5 +58,26 @@ public class AlcoholInfoController {
     public void closeWindow(){
         Stage stage = (Stage) close.getScene().getWindow();
         stage.close();
+    }
+    @FXML
+    public void buy(ActionEvent event){
+        Application a = new Application() {
+            @Override
+            public void start(Stage primaryStage) throws Exception {
+
+            }
+        };
+        a.getHostServices().showDocument("http://www.wine-searcher.com/find/" + alcBrandName.getText());
+    }
+    @FXML
+    public void review(ActionEvent event){
+        Application a = new Application() {
+            @Override
+            public void start(Stage primaryStage) throws Exception {
+
+            }
+        };
+        a.getHostServices().showDocument("https://www.google.com/search?q=" + alcBrandName.getText() + " reviews");
+       // a.getHostServices().showDocument("https://www.tripadvisor.com/Search?geo=&pid=3825&redirect=&startTime=&uiOrigin=&q=" + alcBrandName.getText());
     }
 }
