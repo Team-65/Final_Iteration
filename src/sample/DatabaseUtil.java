@@ -187,9 +187,11 @@ public class DatabaseUtil {
      * @param brandName
      * @throws SQLException
      */
-    public void addAlcohol(String name, String appellation, String sulfiteDesc, double alcoholContent, double netContent, String healthWarning, int productType, int classType, String labelLegibility, int labelSize, String formulas, int alcoholType, String bottlersInfo, String brandName) throws SQLException {
+    public int addAlcohol(String name, String appellation, String sulfiteDesc, double alcoholContent, double netContent, String healthWarning, int productType, int classType, String labelLegibility, int labelSize, String formulas, int alcoholType, String bottlersInfo, String brandName) throws SQLException {
+        int aid;
         String values = "'" + name + "', '" + appellation + "', '" + sulfiteDesc + "', " + alcoholContent + "," + netContent + ",'" + healthWarning + "', " + productType + ", " + classType + ", '" + labelLegibility + "', " + labelSize + ", '" + formulas + "', " + alcoholType + ", '" + bottlersInfo + "', '" + brandName + "', '" + "PROCESSING" + "')";
-        addToTable("ALCOHOL", ALCOHOL_FIELDS, values, "AID");
+        aid = addToTable("ALCOHOL", ALCOHOL_FIELDS, values, "AID");
+        return aid;
     }
 
     /**
@@ -233,16 +235,18 @@ public class DatabaseUtil {
      * @param type3
      * @throws SQLException
      */
-    public void addBeerForm(String ttbid, int repid, String serial, String address, String fancyName, String formula, int permit_no, String infoOnBottle, String source_of_product,
+    public int addBeerForm(String ttbid, int repid, String serial, String address, String fancyName, String formula, int permit_no, String infoOnBottle, String source_of_product,
                             String type_of_product, String brand_name, String phone_number, String email, String dateFormat, String applicantName, String alcoholType,
                             String alcoholContent, String status, int type1, String type2, int type3) throws SQLException {
 
         int aid = getAccountAid(AccountsUtil.getUsername());
+        int id;
         double alcohol = Double.parseDouble(alcoholContent);
         String values = "'" + ttbid + "'," + repid + ",'" + serial + "','" + address + "', '" + fancyName + "', '" + formula + "', " + permit_no + ", '" + infoOnBottle + "','" + source_of_product + "', '" + type_of_product + "'" +
                 ", '" + brand_name + "','" + phone_number + "', '" + email + "', '" + dateFormat + "', '" + applicantName + "', '" + alcoholType + "', '" + status + "', " + aid + ","+alcohol+", "+type1+", '"+type2+"', "+type3+")";
 
-        addToTable("FORM", FORM_FIELDS_BEER, values, "FID");
+        id = addToTable("FORM", FORM_FIELDS_BEER, values, "FID");
+        return id;
     }
 
     /**
@@ -275,26 +279,30 @@ public class DatabaseUtil {
      * @param type3
      * @throws SQLException
      */
-    public void addWineForm(String ttbid, int repid, String serial, String address, String fancyName, String formula, String grapeVar, String appellation, int permit_no, String infoOnBottle, String source_of_product,
+    public int addWineForm(String ttbid, int repid, String serial, String address, String fancyName, String formula, String grapeVar, String appellation, int permit_no, String infoOnBottle, String source_of_product,
                             String type_of_product, String brand_name, String phone_number, String email, String dateFormat, String applicantName, String alcoholType,
                             int vintage, double ph, String alcoholContent, String status, int type1, String type2, int type3) throws SQLException {
         int aid = getAccountAid(AccountsUtil.getUsername());
         double alcohol = Double.parseDouble(alcoholContent);
+        int id;
         String values = "'" + ttbid + "'," + repid + ",'" + serial + "','" + address + "', '" + fancyName + "', '" + formula + "','" + grapeVar + "','" + appellation + "'," + permit_no + ", '" + infoOnBottle + "','" + source_of_product + "', '" + type_of_product + "'" +
                 ", '" + brand_name + "','" + phone_number + "', '" + email + "', '" + dateFormat + "', '" + applicantName + "', '" + alcoholType + "', " + vintage + ", " + ph + ",'" + status + "', " + aid + ","+alcohol+", "+type1+", '"+type2+"', "+type3+")";
-        addToTable("FORM", FORM_FIELDS_WINE, values, "FID");
+        id = addToTable("FORM", FORM_FIELDS_WINE, values, "FID");
+        return id;
     }
 
-    public void addDistilledSpiritsForm(String ttbid, int repid, String serial, String address, String fancyName, String formula, int permit_no, String infoOnBottle, String source_of_product,
+    public int addDistilledSpiritsForm(String ttbid, int repid, String serial, String address, String fancyName, String formula, int permit_no, String infoOnBottle, String source_of_product,
                                         String type_of_product, String brand_name, String phone_number, String email, String dateFormat, String applicantName, String alcoholType,
                                         String alcoholContent, String status, int type1, String type2, int type3) throws SQLException {
 
         int aid = getAccountAid(AccountsUtil.getUsername());
         double alcohol = Double.parseDouble(alcoholContent);
+        int id;
         String values = "'" + ttbid + "'," + repid + ",'" + serial + "','" + address + "', '" + fancyName + "', '" + formula + "', " + permit_no + ", '" + infoOnBottle + "','" + source_of_product + "', '" + type_of_product + "'" +
                 ", '" + brand_name + "','" + phone_number + "', '" + email + "', '" + dateFormat + "', '" + applicantName + "', '" + alcoholType + "', '" + status + "', " + aid + ","+alcohol+", "+type1+", '"+type2+"', "+type3+")";
 
-        addToTable("FORM", FORM_FIELDS_BEER, values, "FID");
+        id = addToTable("FORM", FORM_FIELDS_BEER, values, "FID");
+        return id;
     }
 
     /**
@@ -385,7 +393,7 @@ public class DatabaseUtil {
      * @throws SQLException
      */
     // Automatically gives primary ID  for row inserted by incrementing from previous row's ID in table
-    private boolean addToTable(String TABLENAME, String FIELDS, String values, String IDNAME) throws SQLException {
+    private int addToTable(String TABLENAME, String FIELDS, String values, String IDNAME) throws SQLException {
         boolean isAdded = false;
 
         int ID;
@@ -407,7 +415,7 @@ public class DatabaseUtil {
 
         System.out.println(uRows + " Row(s) Updated");
 
-        return isAdded;
+        return ID;
     }
 
     // (METHOD OVERLOAD) Same method as before but requests input for value of primary ID for the row inserted
@@ -475,7 +483,7 @@ public class DatabaseUtil {
 
     // Code used to search Alcohol table based on alcohol type
     public List<AlcoholData> searchAlcoholWithType(int alcoholType) throws SQLException{
-        String query = "SELECT * FROM ALCOHOL WHERE ALCOHOL.ALCOHOL_TYPE = " + alcoholType;
+        String query = "SELECT * FROM ALCOHOL WHERE ALCOHOL.ALCOHOL_TYPE = " + alcoholType + " AND ALCOHOL.STATUS = 'APPROVED'";
 
         return searchAlcoholTable(query);
     }
@@ -820,6 +828,7 @@ public class DatabaseUtil {
 */
         // change alcohol status to approved
         changeAlcoholStatus("APPROVED", thisForm.getAssociatedAlchID());
+        System.out.println(thisForm.getAssociatedAlchID());
     }
 
     public BeerApplicationData fillSubmittedBeerForm(int fid) throws SQLException{

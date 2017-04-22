@@ -394,7 +394,8 @@ public class NewLabelController{
         sulfiteDesc= sulfiteField.getText();
         bottlerInfo= bottlerField.getText();
         healthWarningText= healthWarningField.getText();
-
+        int aid;
+        int getId;
         AcceptanceInformation acceptanceInfo = new AcceptanceInformation(date, applicantName,
                 null, "UNASSIGNED");
 
@@ -405,13 +406,13 @@ public class NewLabelController{
                             fancyName, formula, grape_varietal, appellation, permit_no, infoOnBottle,
                             source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName,
                             alcoholType, alcoholContent, type1, type2, type3,vintage_date, ph_level);
-                    submitWine(Data);
+                    getId = submitWine(Data);
 
                     // Add to alcohol
-                    db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, 0, 0, "n/a", 0, "n/a", 2, bottlerInfo, brand_name);
+                    aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, 0, 0, "n/a", 0, "n/a", 2, bottlerInfo, brand_name);
 
                     //connect form and alcohol
-                    db.updateAlcoholIDForForm(Data.getAssociatedAlchID(), Data.getFormID());
+                    db.updateAlcoholIDForForm(aid, getId);
 
                     System.out.println("It Works");
                     work.switchScene("NewApp.fxml", "New Application");
@@ -424,13 +425,13 @@ public class NewLabelController{
                             source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName,
                             alcoholType, alcoholContent, type1, type2, type3);
 
-                    submitBeer(Data);
+                    getId = submitBeer(Data);
 
                     // Add to alcohol
-                    db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, type1, 0, "n/a", 0, "n/a", 1, bottlerInfo, brand_name);
+                    aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, type1, 0, "n/a", 0, "n/a", 1, bottlerInfo, brand_name);
 
                     //connect form and alcohol
-                    db.updateAlcoholIDForForm(Data.getAssociatedAlchID(), Data.getFormID());
+                    db.updateAlcoholIDForForm(aid, getId);
 
                     System.out.println("This works");
                     work.switchScene("NewApp.fxml", "New Application");
@@ -442,13 +443,12 @@ public class NewLabelController{
                             fancyName, formula, permit_no, infoOnBottle,
                             source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName,
                             alcoholType, alcoholContent, type1, type2, type3);
-                    submitDistilledSpirits(Data);
-
+                    getId = submitDistilledSpirits(Data);
                     // Add to alcohol
-                    db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, type1, 0, "n/a", 0, "n/a", 3, bottlerInfo, brand_name);
+                    aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, 0, 0, "n/a", 0, "n/a", 3, bottlerInfo, brand_name);
 
                     //connect form and alcohol
-                    db.updateAlcoholIDForForm(Data.getAssociatedAlchID(), Data.getFormID());
+                    db.updateAlcoholIDForForm(aid, getId);
 
                     System.out.println("This works too");
                     work.switchScene("NewApp.fxml", "New Application");
@@ -464,7 +464,7 @@ public class NewLabelController{
      * @param wd Instance of WineApplicationData.
      * @throws SQLException
      */
-    public void submitWine(WineApplicationData wd)throws SQLException{
+    public int submitWine(WineApplicationData wd)throws SQLException{
         String ttbid = db.getNewTTBID();
         int repid = wd.getRepid();
         String serial = wd.getSerial();
@@ -491,12 +491,14 @@ public class NewLabelController{
         int type1 = wd.getType1();
         String type2 = wd.getType2();
         int type3 = wd.getType3();
-
-        db.addWineForm(ttbid,repid, serial,address, fancyName, formula, grape_varietal, appellation, permit_no, infoOnBottle, source_of_product,
+        int id;
+        id = db.addWineForm(ttbid,repid, serial,address, fancyName, formula, grape_varietal, appellation, permit_no, infoOnBottle, source_of_product,
                 type_of_product, brand_name, phone_number, email, dateFormat, applicantName,alcoholType,
                 vintage_date, ph_level, alcoholContent, status, type1, type2, type3);
 
         roundRobin();
+
+        return id;
 
     }
 
@@ -522,7 +524,7 @@ public class NewLabelController{
      * @param bd Instance of BeerApplicationData.
      * @throws SQLException
      */
-    public void submitBeer(BeerApplicationData bd) throws SQLException{
+    public int submitBeer(BeerApplicationData bd) throws SQLException{
         String ttbid = db.getNewTTBID();
         int repid = bd.getRepid();
         String serial = bd.getSerial();
@@ -545,15 +547,16 @@ public class NewLabelController{
         int type1 = bd.getType1();
         String type2 = bd.getType2();
         int type3 = bd.getType3();
-
-        db.addBeerForm(ttbid, repid, serial, address, fancyName, formula, permit_no, infoOnBottle, source_of_product, type_of_product, brand_name, phone_number, email,
+        int id;
+        id = db.addBeerForm(ttbid, repid, serial, address, fancyName, formula, permit_no, infoOnBottle, source_of_product, type_of_product, brand_name, phone_number, email,
                 dateFormat, applicantName, alcoholType, alcoholContent, status, type1, type2, type3);
 
 
         roundRobin();
+        return id;
     }
 
-    public void submitDistilledSpirits(BeerApplicationData bd) throws SQLException{
+    public int  submitDistilledSpirits(BeerApplicationData bd) throws SQLException{
         String ttbid = db.getNewTTBID();
         int repid = bd.getRepid();
         String serial = bd.getSerial();
@@ -576,11 +579,12 @@ public class NewLabelController{
         int type1 = bd.getType1();
         String type2 = bd.getType2();
         int type3 = bd.getType3();
-
-        db.addDistilledSpiritsForm(ttbid, repid, serial, address, fancyName, formula, permit_no, infoOnBottle, source_of_product, type_of_product, brand_name, phone_number, email,
+        int id;
+        id = db.addDistilledSpiritsForm(ttbid, repid, serial, address, fancyName, formula, permit_no, infoOnBottle, source_of_product, type_of_product, brand_name, phone_number, email,
                 dateFormat, applicantName, alcoholType, alcoholContent, status, type1, type2, type3);
 
         roundRobin();
+        return id;
     }
 
     /**
