@@ -417,7 +417,7 @@ public class NewLabelController{
 
                     // Add to alcohol
                     aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, 0, 0, "n/a", 0, "n/a", 2, bottlerInfo, brand_name);
-
+                    saveImage(getId, aid);
                     //connect form and alcohol
                     db.updateAlcoholIDForForm(aid, getId);
 
@@ -436,7 +436,7 @@ public class NewLabelController{
 
                     // Add to alcohol
                     aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, type1, 0, "n/a", 0, "n/a", 1, bottlerInfo, brand_name);
-
+                    saveImage(getId, aid);
                     //connect form and alcohol
                     db.updateAlcoholIDForForm(aid, getId);
 
@@ -453,7 +453,7 @@ public class NewLabelController{
                     getId = submitDistilledSpirits(Data);
                     // Add to alcohol
                     aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, 0, 0, "n/a", 0, "n/a", 3, bottlerInfo, brand_name);
-
+                    saveImage(getId, aid);
                     //connect form and alcohol
                     db.updateAlcoholIDForForm(aid, getId);
 
@@ -504,7 +504,7 @@ public class NewLabelController{
                 vintage_date, ph_level, alcoholContent, status, type1, type2, type3);
 
         roundRobin();
-        saveImage(id);
+
 
         return id;
 
@@ -561,7 +561,7 @@ public class NewLabelController{
 
 
         roundRobin();
-        saveImage(id);
+
         return id;
     }
 
@@ -593,7 +593,7 @@ public class NewLabelController{
                 dateFormat, applicantName, alcoholType, alcoholContent, status, type1, type2, type3);
 
         roundRobin();
-        saveImage(id);
+
         return id;
     }
 
@@ -640,12 +640,15 @@ public class NewLabelController{
         return newDir;
     }
 
-    public void saveImage(int id){
+    public void saveImage(int id, int aid){
         BufferedImage image2 = null;
+        BufferedImage image3 = null;
         try {
             String path = getPath();
             image2 = ImageIO.read(tempFile);
+            image3 = ImageIO.read(tempFile);
             ImageIO.write(image2, "jpg", new File(path + "/" + id + ".jpg"));
+            ImageIO.write(image3, "jpg", new File(path + "/" + aid + ".jpg"));
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -1081,6 +1081,8 @@ public class DatabaseUtil {
                 return "BEER";
             }
         }
+        sm.close();
+        rset.close();
         return "OTHER";
     }
 
@@ -1098,6 +1100,10 @@ public class DatabaseUtil {
                 return "DOMESTIC";
             }
         }
+        if(sm != null) {
+            sm.close();
+        }
+        rset.close();
         return "IMPORTED";
     }
 
@@ -1115,6 +1121,10 @@ public class DatabaseUtil {
                 return empty;
             }
         }
+        if(sm != null) {
+            sm.close();
+        }
+        rset.close();
         return notempty;
     }
 
@@ -1128,10 +1138,14 @@ public class DatabaseUtil {
         rset = sm.executeQuery();
         while (rset.next()) {
             String type = rset.getString("APP_TYPE_2");
-            if(type == null) {
+            if(type.equals("")) {
                 return empty;
             }
         }
+        if(sm != null) {
+            sm.close();
+        }
+        rset.close();
         return notempty;
     }
 
@@ -1149,6 +1163,10 @@ public class DatabaseUtil {
                 return empty;
             }
         }
+        if(sm != null) {
+            sm.close();
+        }
+        rset.close();
         return notempty;
     }
 // Get Status
@@ -1163,6 +1181,10 @@ public class DatabaseUtil {
             status = rset.getString("STATUS");
             return status;
         }
+        if(sm != null) {
+            sm.close();
+        }
+        rset.close();
         return status;
     }
 
@@ -1177,13 +1199,19 @@ public class DatabaseUtil {
             aid = rset.getInt("ALCHID");
             return aid;
         }
+
+        if(sm != null) {
+            sm.close();
+        }
+        rset.close();
         return aid;
     }
 
-    public void resubmitWine(int fid, WineApplicationData a) throws SQLException{
+    public int resubmitWine(int fid, WineApplicationData a) throws SQLException{
 
         String status = "UNASSIGNED";
         Date date = new Date();
+        int aid = getAidOfForm(fid);
         String dateFormat = date.toString();
         String sql = "UPDATE APP.FORM SET TTBID = ?, REPID = ?, SERIAL = ?, ADDRESS = ?, FANCYNAME = ?," +
                 "FORMULA = ?, GRAPEVAR = ?, APPELLATION = ?, PERMITNO = ?, SOURCE = ?, TYPE = ?, BRANDNAME = ?," +
@@ -1214,18 +1242,23 @@ public class DatabaseUtil {
         sm.setInt(21, fid);
 
         sm.executeUpdate();
+        if(sm != null) {
+            sm.close();
+        }
+        return aid;
     }
 
-    public void resubmitBeer(int fid, BeerApplicationData a) throws SQLException{
+    public int resubmitBeer(int fid, BeerApplicationData a) throws SQLException{
 
         String status = "UNASSIGNED";
         Date date = new Date();
+        int aid = getAidOfForm(fid);
         String dateFormat = date.toString();
         String sql = "UPDATE APP.FORM SET TTBID = ?, REPID = ?, SERIAL = ?, ADDRESS = ?, FANCYNAME = ?," +
                 "FORMULA = ?,PERMITNO = ?, SOURCE = ?, TYPE = ?, BRANDNAME = ?," +
                 "PHONE = ?, EMAIL = ?, DATE = ?, APPLICANTNAME = ?, ALCOHOLTYPE = ?, STATUS = ? WHERE FID = ?";
 
-        PreparedStatement sm;
+        PreparedStatement sm = null;
         sm = conn.prepareStatement(sql);
         sm.setString(1, a.getTtbid());
         sm.setInt(2, a.getRepid());
@@ -1246,6 +1279,10 @@ public class DatabaseUtil {
         sm.setInt(17, fid);
 
         sm.executeUpdate();
+        if(sm != null) {
+            sm.close();
+        }
+        return aid;
     }
 
     /**

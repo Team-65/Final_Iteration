@@ -6,11 +6,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
 import javafx.stage.Stage;
 import javafx.application.HostServices;
 
+import java.io.File;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 /**
  * Controller for the alcohol info page that appears when an alcohol is selected from a search.
@@ -26,6 +32,7 @@ public class AlcoholInfoController {
     ImageView alcImage;
     @FXML
     Button close;
+    private boolean foundImage = false;
 
     public void initialize(){
         alcAID.setText(String.valueOf(dataPass.getAlcData().getAid()));
@@ -46,11 +53,26 @@ public class AlcoholInfoController {
         try {
             InputStream resource = ScreenUtil.class.getClassLoader().getResourceAsStream("labels/"  + dataPass.getAlcData().getAid() + ".jfif");
             alcImage.setImage(new javafx.scene.image.Image(resource, 500.0, 0.0, true, true));
+            foundImage = true;
+
         }
         catch(NullPointerException nullPoint){
             InputStream resource = ScreenUtil.class.getClassLoader().getResourceAsStream("labels/imageUnavailable.jpg");
             alcImage.setImage(new javafx.scene.image.Image(resource, 100.0, 0.0, true, true));
             System.out.println("Image Was Not Found For " + dataPass.getAlcData().getBrandName() + "'s "+ dataPass.getAlcData().getName());
+        }
+        if(foundImage == false) {
+            try {
+                String path = getPath();
+                File file = new File(path + "/" + dataPass.getAlcData().getAid() + ".jpg");
+                Image image = new Image(file.toURI().toString());
+                System.out.println(dataPass.getAlcData().getAid());
+                alcImage.setImage(image);
+            } catch (Exception nullPoint) {
+                InputStream resource = ScreenUtil.class.getClassLoader().getResourceAsStream("labels/imageUnavailable.jpg");
+                alcImage.setImage(new javafx.scene.image.Image(resource, 100.0, 0.0, true, true));
+                System.out.println("Image Was Not Found For " + dataPass.getAlcData().getBrandName() + "'s " + dataPass.getAlcData().getName());
+            }
         }
 
     }
@@ -79,5 +101,20 @@ public class AlcoholInfoController {
         };
         a.getHostServices().showDocument("https://www.google.com/search?q=" + alcBrandName.getText() + " reviews");
        // a.getHostServices().showDocument("https://www.tripadvisor.com/Search?geo=&pid=3825&redirect=&startTime=&uiOrigin=&q=" + alcBrandName.getText());
+    }
+
+    public String getPath() throws UnsupportedEncodingException {
+
+
+        URL url = this.getClass().getProtectionDomain().getCodeSource().getLocation();
+        String jarPath = URLDecoder.decode(url.getFile(), "UTF-8");
+        String parentPath = new File(jarPath).getParentFile().getPath();
+
+        String fileSeparator = System.getProperty("file.separator");
+        String newDir = parentPath + fileSeparator + "images" + fileSeparator;
+
+        System.out.println(newDir);
+
+        return newDir;
     }
 }

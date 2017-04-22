@@ -510,8 +510,7 @@ public class ReviseAppController {
         int type1 = 0;
         String type2 = "";
         int type3 = 0;
-
-
+        int aid;
         if (dom1111.isSelected()) {
             source_of_product = "DOMESTIC";
         } else if (imp1.isSelected()) {
@@ -530,9 +529,6 @@ public class ReviseAppController {
             type3 = Integer.parseInt(amount.getText());
         }
 
-        if(changeImage){
-            saveImage(fid);
-        }
 
         if (wine1.isSelected()) {
             type_of_product = "WINE";
@@ -543,7 +539,10 @@ public class ReviseAppController {
             String appellation = Appellation1.getText();
             WineApplicationData a = new WineApplicationData(fid, ac, ttbid, repid, serial, address, fancyName, formula, grape_varietal, appellation, permit_no, info,
                     source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName, alcoholType, content, type1, type2, type3, vintage_date, ph_level);
-            du.resubmitWine(fid, a);
+            aid = du.resubmitWine(fid, a);
+            if(changeImage){
+                saveImage(fid, aid);
+            }
             su.switchScene("NewApp.fxml", "Application Menu");
             su.createAlertBox("Notification", "Update is successful");
 
@@ -552,7 +551,10 @@ public class ReviseAppController {
             alcoholType = "MALT BEVERAGES";
             BeerApplicationData a = new BeerApplicationData(fid, ac, ttbid, repid, serial, address, fancyName, formula, permit_no, info,
                     source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName, alcoholType, content, type1, type2, type3);
-            du.resubmitBeer(fid, a);
+            aid = du.resubmitBeer(fid, a);
+            if(changeImage){
+                saveImage(fid, aid);
+            }
             su.switchScene("NewApp.fxml", "Application Menu");
             su.createAlertBox("Notification", "Update is successful");
         } else if (other1.isSelected()) {
@@ -560,7 +562,10 @@ public class ReviseAppController {
             alcoholType = "DISTILLED SPIRITS";
             BeerApplicationData a = new BeerApplicationData(fid, ac, ttbid, repid, serial, address, fancyName, formula, permit_no, info,
                     source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName, alcoholType, content, type1, type2, type3);
-            du.resubmitBeer(fid, a);
+            aid = du.resubmitBeer(fid, a);
+            if(changeImage){
+                saveImage(fid, aid);
+            }
             su.switchScene("NewApp.fxml", "Application Menu");
             su.createAlertBox("Notification", "Update is successful");
         }else{
@@ -622,12 +627,15 @@ public class ReviseAppController {
         return newDir;
     }
 
-    public void saveImage(int id){
+    public void saveImage(int id, int aid){
         BufferedImage image2 = null;
+        BufferedImage image3 = null;
         try {
             String path = getPath();
             image2 = ImageIO.read(tempFile);
+            image3 = ImageIO.read(tempFile);
             ImageIO.write(image2, "jpg", new File(path + "/" + id + ".jpg"));
+            ImageIO.write(image3, "jpg", new File(path + "/" + aid + ".jpg"));
         }catch (Exception e){
             e.printStackTrace();
         }
