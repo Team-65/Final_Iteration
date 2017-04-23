@@ -173,6 +173,7 @@ public class SearchMenuController {
             }
             alcoholDataList = dbUtil.searchAlcoholWithType(alcoholChoice);
             alcoholDataList = interesectAlcoholData(searchByChoice(), alcoholDataList);
+
         }
         else {
             alcoholDataList = searchByChoice();
@@ -289,7 +290,7 @@ public class SearchMenuController {
         boolean toAdd;
 
         if(originalList.size() == 0){
-            return listToAdd;
+            return originalList;
         }
 
         for(int i=0; i < listToAdd.size(); i++) {

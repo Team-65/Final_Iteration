@@ -129,14 +129,6 @@ public class ReviseAppController {
             type2 = databaseUtil.checkforType2(fid);
             type3 = databaseUtil.checkforType3(fid);
             source = databaseUtil.checkforSource(fid);
-            try {
-                String path = getPath();
-                File file = new File(path + "/" + fid + ".jpg");
-                image = new Image(file.toURI().toString());
-                image1.setImage(image);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
             if(dataPasser.getDisableRestField() == 1){
                 state.setDisable(true);
                 amount.setDisable(true);
@@ -183,6 +175,7 @@ public class ReviseAppController {
                     amount.setText(Integer.toString(wine.getType3()));
                 }
                 wine1.setSelected(true);
+                setImage(wine.getTtbid());
                 ID1.setText(wine.getTtbid());
                 RepID1.setText(Integer.toString(wine.getRepid()));
                 PlantReg1.setText(Integer.toString(wine.getPermit_no()));
@@ -244,6 +237,7 @@ public class ReviseAppController {
                     Varietal1.setDisable(true);
                 }
                 beer1.setSelected(true);
+                setImage(beer.getTtbid());
                 ID1.setText(beer.getTtbid());
                 RepID1.setText(Integer.toString(beer.getRepid()));
                 PlantReg1.setText(Integer.toString(beer.getPermit_no()));
@@ -287,6 +281,7 @@ public class ReviseAppController {
                 }
 
                 other1.setSelected(true);
+                setImage(beer.getTtbid());
                 ID1.setText(beer.getTtbid());
                 RepID1.setText(Integer.toString(beer.getRepid()));
                 PlantReg1.setText(Integer.toString(beer.getPermit_no()));
@@ -382,14 +377,7 @@ public class ReviseAppController {
         type2 = databaseUtil.checkforType2(fid);
         type3 = databaseUtil.checkforType3(fid);
         source = databaseUtil.checkforSource(fid);
-        try {
-            String path = getPath();
-            File file = new File(path + "/" + fid + ".jpg");
-            image = new Image(file.toURI().toString());
-            image1.setImage(image);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
         if(source.equals("DOMESTIC")){
             dom1111.setSelected(true);
         }
@@ -411,6 +399,7 @@ public class ReviseAppController {
                     amount.setText(Integer.toString(wine.getType3()));
                 }
                 wine1.setSelected(true);
+                setImage(wine.getTtbid());
                 ID1.setText(wine.getTtbid());
                 RepID1.setText(Integer.toString(wine.getRepid()));
                 PlantReg1.setText(Integer.toString(wine.getPermit_no()));
@@ -441,6 +430,7 @@ public class ReviseAppController {
                     amount.setText(Integer.toString(beer.getType3()));
                 }
                 beer1.setSelected(true);
+                setImage(beer.getTtbid());
                 ID1.setText(beer.getTtbid());
                 RepID1.setText(Integer.toString(beer.getRepid()));
                 PlantReg1.setText(Integer.toString(beer.getPermit_no()));
@@ -467,6 +457,7 @@ public class ReviseAppController {
                     amount.setText(Integer.toString(beer.getType3()));
                 }
                 other1.setSelected(true);
+                setImage(beer.getTtbid());
                 ID1.setText(beer.getTtbid());
                 RepID1.setText(Integer.toString(beer.getRepid()));
                 PlantReg1.setText(Integer.toString(beer.getPermit_no()));
@@ -541,7 +532,7 @@ public class ReviseAppController {
                     source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName, alcoholType, content, type1, type2, type3, vintage_date, ph_level);
             aid = du.resubmitWine(fid, a);
             if(changeImage){
-                saveImage(fid, aid);
+                saveImage(ttbid, aid);
             }
             su.switchScene("NewApp.fxml", "Application Menu");
             su.createAlertBox("Notification", "Update is successful");
@@ -553,7 +544,7 @@ public class ReviseAppController {
                     source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName, alcoholType, content, type1, type2, type3);
             aid = du.resubmitBeer(fid, a);
             if(changeImage){
-                saveImage(fid, aid);
+                saveImage(ttbid, aid);
             }
             su.switchScene("NewApp.fxml", "Application Menu");
             su.createAlertBox("Notification", "Update is successful");
@@ -564,7 +555,7 @@ public class ReviseAppController {
                     source_of_product, type_of_product, brand_name, phone_number, email, date, applicantName, alcoholType, content, type1, type2, type3);
             aid = du.resubmitBeer(fid, a);
             if(changeImage){
-                saveImage(fid, aid);
+                saveImage(ttbid, aid);
             }
             su.switchScene("NewApp.fxml", "Application Menu");
             su.createAlertBox("Notification", "Update is successful");
@@ -627,7 +618,7 @@ public class ReviseAppController {
         return newDir;
     }
 
-    public void saveImage(int id, int aid){
+    public void saveImage(String id, int aid){
         BufferedImage image2 = null;
         BufferedImage image3 = null;
         try {
@@ -636,6 +627,17 @@ public class ReviseAppController {
             image3 = ImageIO.read(tempFile);
             ImageIO.write(image2, "jpg", new File(path + "/" + id + ".jpg"));
             ImageIO.write(image3, "jpg", new File(path + "/" + aid + ".jpg"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setImage(String aid){
+        try {
+            String path = getPath();
+            File file = new File(path + "/" + aid + ".jpg");
+            image = new Image(file.toURI().toString());
+            image1.setImage(image);
         }catch (Exception e){
             e.printStackTrace();
         }
