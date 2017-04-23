@@ -82,6 +82,7 @@ public class NewLabelController{
     @FXML private Button helpNewButton;
     private String filepath;
     private File tempFile;
+    private String ttb;
     @FXML
     /**
      * Clears information from the screen.
@@ -263,7 +264,10 @@ public class NewLabelController{
         if(!Content.getText().trim().isEmpty()){
             try {
                 alcoholContentDouble = Double.parseDouble(Content.getText());
-
+                if(alcoholContentDouble > 66666 || alcoholContentDouble < 0){
+                    work.createAlertBox("ERROR", "Invaid Input for Alcohol Content");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 work.createAlertBox("ERROR", "Invaid Input for Alcohol content");
                 valid = false;
@@ -375,6 +379,10 @@ public class NewLabelController{
         if(!originField.getText().trim().isEmpty()) {
             try {
                 originCode = Integer.parseInt(originField.getText());
+                if(originCode > 66666 || originCode < 0){
+                    work.createAlertBox("ERROR", "Invaid Input for Origin Code");
+                    valid = false;
+                }
 
             } catch (NumberFormatException e) {
                 work.createAlertBox("ERROR", "Invaid Input for Origin Code");
@@ -388,6 +396,10 @@ public class NewLabelController{
         if(!netContentField.getText().trim().isEmpty()) {
             try {
                 netContentDouble = Double.parseDouble(netContentField.getText());
+                if(netContentDouble > 66666 || netContentDouble < 0){
+                    work.createAlertBox("ERROR", "Invaid Input for Net Content");
+                    valid = false;
+                }
 
             } catch (NumberFormatException e) {
                 work.createAlertBox("ERROR", "Invalid Input for Net Content");
@@ -417,7 +429,7 @@ public class NewLabelController{
 
                     // Add to alcohol
                     aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, 0, 0, "n/a", 0, "n/a", 2, bottlerInfo, brand_name);
-                    saveImage(getId, aid);
+                    saveImage(ttb, aid);
                     //connect form and alcohol
                     db.updateAlcoholIDForForm(aid, getId);
 
@@ -436,7 +448,7 @@ public class NewLabelController{
 
                     // Add to alcohol
                     aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, type1, 0, "n/a", 0, "n/a", 1, bottlerInfo, brand_name);
-                    saveImage(getId, aid);
+                    saveImage(ttb, aid);
                     //connect form and alcohol
                     db.updateAlcoholIDForForm(aid, getId);
 
@@ -453,7 +465,7 @@ public class NewLabelController{
                     getId = submitDistilledSpirits(Data);
                     // Add to alcohol
                     aid = db.addAlcohol(fancyName, appellation, sulfiteDesc, alcoholContentDouble, netContentDouble, healthWarningText, 0, 0, "n/a", 0, "n/a", 3, bottlerInfo, brand_name);
-                    saveImage(getId, aid);
+                    saveImage(ttb, aid);
                     //connect form and alcohol
                     db.updateAlcoholIDForForm(aid, getId);
 
@@ -473,6 +485,7 @@ public class NewLabelController{
      */
     public int submitWine(WineApplicationData wd)throws SQLException{
         String ttbid = db.getNewTTBID();
+        ttb = ttbid;
         int repid = wd.getRepid();
         String serial = wd.getSerial();
         String address = wd.getAddress();
@@ -534,6 +547,7 @@ public class NewLabelController{
      */
     public int submitBeer(BeerApplicationData bd) throws SQLException{
         String ttbid = db.getNewTTBID();
+        ttb = ttbid;
         int repid = bd.getRepid();
         String serial = bd.getSerial();
         String address = bd.getAddress();
@@ -567,6 +581,7 @@ public class NewLabelController{
 
     public int  submitDistilledSpirits(BeerApplicationData bd) throws SQLException{
         String ttbid = db.getNewTTBID();
+        ttb = ttbid;
         int repid = bd.getRepid();
         String serial = bd.getSerial();
         String address = bd.getAddress();
@@ -640,7 +655,7 @@ public class NewLabelController{
         return newDir;
     }
 
-    public void saveImage(int id, int aid){
+    public void saveImage(String id, int aid){
         BufferedImage image2 = null;
         BufferedImage image3 = null;
         try {
