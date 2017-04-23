@@ -25,6 +25,7 @@ public class WorkFlowController {
     private static ApplicationData rowChosen;
     private ArrayList<ApplicationData> formsList = new ArrayList<>();
     @FXML private Button viewAllButton;
+    @FXML private Button workflowHelpButton;
 
     private ObservableList<ApplicationData> observableFormsList;
 
@@ -132,4 +133,6 @@ public class WorkFlowController {
     public static void setRowChosen(ApplicationData rowChosen) {
         WorkFlowController.rowChosen = rowChosen;
     }
+
+
 }

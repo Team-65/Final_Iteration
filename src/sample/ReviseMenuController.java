@@ -42,6 +42,7 @@ public class ReviseMenuController {
     @FXML private Button UploadImage;
     @FXML private Label UploadImageLabel;
     @FXML private ChoiceBox applicationChoiceBox;
+    @FXML private Button reviseHelpButton;
 
     private String revisionData = "";
     private DataPasser dataPasser = new DataPasser();
@@ -286,6 +287,10 @@ public class ReviseMenuController {
             } catch (Exception e) {
                 e.printStackTrace();
             }*/
-        }
+    }
+
+    public void helpButtonClicked() {
+        screenUtil.switchScene("ReviseHelp.fxml", "Help");
+    }
 
 }

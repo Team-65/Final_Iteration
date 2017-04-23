@@ -546,7 +546,7 @@ public class SearchMenuController {
 
     }
 
-    public void buttonClicked (){
+    public void searchHelpButton (){
         screenUtil.switchScene("SearchHelp.fxml","Help");
     }
 

@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 
@@ -25,6 +26,10 @@ public class ReviseHelpController {
             screenImage.setImage(new javafx.scene.image.Image(resource, 100.0, 0.0, true, true));
             System.out.println("Image Was Not Found");
         }
+
+    }
+    public void goBack(ActionEvent event){
+        screenUtil.switchScene("MainMenu.fxml", "Main Menu");
 
     }
 

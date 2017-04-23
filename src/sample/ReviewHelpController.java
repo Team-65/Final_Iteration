@@ -32,7 +32,7 @@ public class ReviewHelpController {
     }
 
     public void goBack(){
-        screenUtil.switchScene("SearchMenu.fxml", "Search");
+        screenUtil.switchScene("ApplicationReview.fxml", "Search");
 
     }
 }

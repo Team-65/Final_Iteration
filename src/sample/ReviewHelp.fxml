@@ -16,7 +16,7 @@
          <image>
          </image>
       </ImageView>
-      <TextArea layoutX="12.0" layoutY="354.0" prefHeight="164.0" prefWidth="577.0" text="On this Page, who will recieve the information that a Manufacturer has inputted into his most recent application. You will review this application and make sure that it is up to government regulations.&#10;&#10;Please Make sure that all fields have the correct information. If you see any discrepancies, please make note of them in the comments section, and press the &quot;Reject&quot; Button. This will send the form back to the Manufacturer for review.&#10;&#10;If everything is in order, then press the &quot;Approve&quot; button in order to accept this information and send the data into the COLA Registry." wrapText="true" />
+      <TextArea editable="false" layoutX="12.0" layoutY="354.0" prefHeight="164.0" prefWidth="577.0" text="On this Page, who will recieve the information that a Manufacturer has inputted into his most recent application. You will review this application and make sure that it is up to government regulations.&#10;&#10;Please Make sure that all fields have the correct information. If you see any discrepancies, please make note of them in the comments section, and press the &quot;Reject&quot; Button. This will send the form back to the Manufacturer for review.&#10;&#10;If everything is in order, then press the &quot;Approve&quot; button in order to accept this information and send the data into the COLA Registry." wrapText="true" />
       <Button fx:id="back" layoutX="14.0" layoutY="527.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
       <Label layoutX="4.0" layoutY="14.0" text="Help: Label Review">
          <font>
